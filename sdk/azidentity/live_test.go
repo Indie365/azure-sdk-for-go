@@ -67,7 +67,6 @@ const (
 	fakeUsername             = "fake@user"
 	fakeAdfsAuthority        = "fake.adfs.local"
 	fakeAdfsScope            = "fake.adfs.local/fake-scope/.default"
-	liveTestScope            = "https://management.core.windows.net//.default"
 	redacted                 = "redacted"
 )
 
@@ -96,6 +95,7 @@ var adfsLiveUser = struct {
 var (
 	adfsAuthority     = os.Getenv("ADFS_AUTHORITY_HOST")
 	adfsScope         = os.Getenv("ADFS_SCOPE")
+	liveTestScope     = os.Getenv("SERVICE_MANAGEMENT_URL") + "/.default"
 	_, runManualTests = os.LookupEnv(azidentityRunManualTests)
 )
 
@@ -109,6 +109,7 @@ func setFakeValues() {
 	liveSP.tenantID = fakeTenantID
 	liveSP.pemPath = "testdata/certificate.pem"
 	liveSP.pfxPath = "testdata/certificate.pfx"
+	liveTestScope = "https://management.core.windows.net//.default"
 	liveUser.tenantID = fakeTenantID
 	liveUser.username = fakeUsername
 	liveUser.password = "fake-password"
