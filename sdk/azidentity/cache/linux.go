@@ -227,14 +227,14 @@ func (k *keyring) getKey() ([]byte, error) {
 		// search for a key matching the description i.e. the cache name
 		keyID, err := unix.KeyctlSearch(k.ringID, userKey, k.description, 0)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("KeyctlSearch failed due to error %q", err)
 		}
 		k.keyID = keyID
 	}
 	pl := make([]byte, keySize+1) // extra byte for the payload's null terminator
 	_, err := unix.KeyctlBuffer(unix.KEYCTL_READ, k.keyID, pl, 0)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("KeyctlBuffer failed due to error %q", err)
 	}
 	k.key = pl[:keySize]
 	return k.key, nil
