@@ -24,8 +24,23 @@ pr:
 extends:
     template: /eng/pipelines/templates/jobs/archetype-sdk-client.yml
     parameters:
+      PreSteps:
+        - task: AzureCLI@2
+          displayName: Set OIDC variables
+          env:
+            ARM_OIDC_TOKEN: $(ARM_OIDC_TOKEN)
+          inputs:
+            addSpnToEnvironment: true
+            azureSubscription: azure-sdk-tests
+            inlineScript: |
+              Write-Host "##vso[task.setvariable variable=ARM_CLIENT_ID;issecret=true]$($env:servicePrincipalId)"
+              Write-Host "##vso[task.setvariable variable=ARM_OIDC_TOKEN;issecret=true]$($env:idToken)"
+              Write-Host "##vso[task.setvariable variable=ARM_TENANT_ID;issecret=true]$($env:tenantId)"
+            scriptLocation: inlineScript
+            scriptType: pscore
       CloudConfig:
         Public:
+          ServiceConnection: azure-sdk-tests
           SubscriptionConfigurations:
             - $(sub-config-azure-cloud-test-resources)
             - $(sub-config-identity-test-resources)
@@ -33,6 +48,7 @@ extends:
         SYSTEM_ACCESSTOKEN: $(System.AccessToken)
       RunLiveTests: true
       ServiceDirectory: azidentity
+      UseFederatedAuth: true
       UsePipelineProxy: false
 
       ${{ if endsWith(variables['Build.DefinitionName'], 'weekly') }}:

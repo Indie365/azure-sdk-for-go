@@ -16,7 +16,6 @@ if ($CI) {
     Write-Host "Skipping post-provisioning script because resources weren't deployed"
     return
   }
-  az login --service-principal -u $DeploymentOutputs['AZIDENTITY_CLIENT_ID'] -p $DeploymentOutputs['AZIDENTITY_CLIENT_SECRET'] --tenant $DeploymentOutputs['AZIDENTITY_TENANT_ID']
   az account set --subscription $DeploymentOutputs['AZIDENTITY_SUBSCRIPTION_ID']
 }
 
