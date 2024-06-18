@@ -23,7 +23,7 @@ if (!$CI) {
     return
 }
 
-az login --service-principal -u $TestApplicationId --tenant $TenantId --allow-no-subscriptions --federated-token $env:ARM_OIDC_TOKEN
+az login --service-principal -u $TestApplicationId --tenant $TenantId --allow-no-subscriptions --federated-token $env:SYSTEM_ACCESSTOKEN
 
 if ($null -eq $EnvironmentVariables -or $EnvironmentVariables.Count -eq 0) {
     throw "EnvironmentVariables must be set in the calling script New-TestResources.ps1"
